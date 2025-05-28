@@ -5,10 +5,14 @@ import com.pieceofcake.product_service.common.entity.BaseResponseEntity;
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.dto.in.ProductCreateRequestDto;
 import com.pieceofcake.product_service.dto.in.ProductUpdateRequestDto;
+import com.pieceofcake.product_service.dto.out.ProductGetUuidResponseDto;
 import com.pieceofcake.product_service.vo.in.ProductCreateRequestVo;
 import com.pieceofcake.product_service.vo.in.ProductUpdateRequestVo;
+import com.pieceofcake.product_service.vo.out.ProductGetUuidResponseVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("api/v1/product")
 @RequiredArgsConstructor
@@ -27,5 +31,11 @@ public class ProductController {
     public BaseResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequestVo productUpdateRequestVo) {
         productService.updateProduct(ProductUpdateRequestDto.from(productUpdateRequestVo));
         return new BaseResponseEntity<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @GetMapping("/list")
+    public BaseResponseEntity<List<ProductGetUuidResponseVo>> getProductUuidList(){
+        return new BaseResponseEntity<>(productService.getProductUuidList().stream()
+                .map(ProductGetUuidResponseDto::toVo).toList());
     }
 }
