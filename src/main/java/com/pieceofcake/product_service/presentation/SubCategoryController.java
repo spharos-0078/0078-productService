@@ -1,6 +1,6 @@
 package com.pieceofcake.product_service.presentation;
 
-import com.pieceofcake.product_service.application.SubCategoryService;
+import com.pieceofcake.product_service.application.SubCategoryServiceImpl;
 import com.pieceofcake.product_service.common.entity.BaseResponseEntity;
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.dto.in.SubCategoryCreateRequestDto;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class SubCategoryController {
-    private final SubCategoryService subCategoryService;
+    private final SubCategoryServiceImpl subCategoryService;
 
     @PostMapping
     public BaseResponseEntity<Void> createSubCategory(

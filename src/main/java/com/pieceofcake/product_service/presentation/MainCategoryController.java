@@ -1,6 +1,6 @@
 package com.pieceofcake.product_service.presentation;
 
-import com.pieceofcake.product_service.application.MainCategoryService;
+import com.pieceofcake.product_service.application.MainCategoryServiceImpl;
 import com.pieceofcake.product_service.common.entity.BaseResponseEntity;
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.dto.in.MainCategoryCreateRequestDto;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainCategoryController {
 
-    private final MainCategoryService mainCategoryService;
+    private final MainCategoryServiceImpl mainCategoryService;
 
     @PostMapping
     public BaseResponseEntity<Void> createMainCategory(@RequestBody MainCategoryCreateRequestVo mainCategoryCreateRequestVo) {
