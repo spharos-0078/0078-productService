@@ -10,4 +10,5 @@ public interface ProductService {
     void createProduct(ProductCreateRequestDto productCreateRequestDto);
     void updateProduct(ProductUpdateRequestDto productUpdateRequestDto);
     List<ProductGetUuidResponseDto> getProductUuidList();
+    void deleteProduct(String productUuid);
 }

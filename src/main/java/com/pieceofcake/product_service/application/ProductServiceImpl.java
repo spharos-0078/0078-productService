@@ -47,4 +47,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllByProductStatus(ProductStatus.STORED)
                 .stream().map(ProductGetUuidResponseDto::from).toList();
     }
+
+    @Transactional
+    @Override
+    public void deleteProduct(String productUuid) {
+        productRepository.softDeleteByProductUuid(productUuid);
+    }
 }

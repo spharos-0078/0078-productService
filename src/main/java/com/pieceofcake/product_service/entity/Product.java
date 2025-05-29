@@ -39,6 +39,9 @@ public class Product extends BaseEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
+
     @Builder
     public Product(Long id, String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice,
                    ProductStatus productStatus, String storageLocation, String description) {

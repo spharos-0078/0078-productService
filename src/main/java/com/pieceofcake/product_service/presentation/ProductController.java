@@ -38,4 +38,10 @@ public class ProductController {
         return new BaseResponseEntity<>(productService.getProductUuidList().stream()
                 .map(ProductGetUuidResponseDto::toVo).toList());
     }
+
+    @DeleteMapping("/{productUuid}")
+    public BaseResponseEntity<Void> deleteProduct(@PathVariable String productUuid){
+        productService.deleteProduct(productUuid);
+        return new BaseResponseEntity<>(BaseResponseStatus.SUCCESS);
+    }
 }
