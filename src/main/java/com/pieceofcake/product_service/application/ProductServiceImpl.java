@@ -2,6 +2,7 @@ package com.pieceofcake.product_service.application;
 
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.common.exception.BaseException;
+import com.pieceofcake.product_service.dto.in.ProductCategoryCreateRequestDto;
 import com.pieceofcake.product_service.dto.in.ProductCreateRequestDto;
 import com.pieceofcake.product_service.dto.in.ProductImageCreateRequestDto;
 import com.pieceofcake.product_service.dto.in.ProductUpdateRequestDto;
@@ -22,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageServiceImpl productImageService;
+    private final ProductCategoryServiceImpl productCategoryService;
 
     @Transactional
     @Override
@@ -31,6 +33,10 @@ public class ProductServiceImpl implements ProductService {
 
         productImageService.createProductImage(ProductImageCreateRequestDto.of(
                 productUuid, productCreateRequestDto.getProductImageRequestDtoList()));
+
+        productCategoryService.createProductCategory(
+                ProductCategoryCreateRequestDto.of(productUuid,
+                        productCreateRequestDto.getMainCategoryId(), productCreateRequestDto.getSubCategoryId()));
     }
 
     @Transactional

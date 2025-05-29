@@ -26,6 +26,14 @@ public class ProductCategoryCreateRequestDto {
                 .build();
     }
 
+    public static ProductCategoryCreateRequestDto of(String productUuid, Integer mainCategoryId, Integer subCategoryId){
+        return ProductCategoryCreateRequestDto.builder()
+                .productUuid(productUuid)
+                .mainCategoryId(mainCategoryId)
+                .subCategoryId(subCategoryId)
+                .build();
+    }
+
     public ProductCategory toEntity() {
         return ProductCategory.builder()
                 .productUuid(productUuid)

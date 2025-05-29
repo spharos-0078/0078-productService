@@ -15,10 +15,13 @@ public class ProductCreateRequestVo {
     private String storageLocation;
     private String description;
     private List<ProductImageRequestVo> productImageRequestVoList;
+    private Integer mainCategoryId;
+    private Integer subCategoryId;
 
     @Builder
     public ProductCreateRequestVo(String productName, Long aiEstimatedPrice, Long purchasePrice, ProductStatus status,
-                                  String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList) {
+                                  String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList,
+                                  Integer mainCategoryId, Integer subCategoryId) {
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
         this.purchasePrice = purchasePrice;
@@ -26,5 +29,7 @@ public class ProductCreateRequestVo {
         this.storageLocation = storageLocation;
         this.description = description;
         this.productImageRequestVoList = productImageRequestVoList;
+        this.mainCategoryId = mainCategoryId;
+        this.subCategoryId = subCategoryId;
     }
 }
