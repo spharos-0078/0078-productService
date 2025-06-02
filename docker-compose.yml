@@ -2,18 +2,12 @@ version: "3.8"
 
 services:
   board-service:
-    image: ${DOCKER_USERNAME}/product-service:latest
     container_name: product-service
+    image: ${DOCKER_USERNAME}/product-service:latest
     ports:
       - "8083:8083"
     env_file:
       - .env
-    environment:
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      EUREKA_HOST: ${EUREKA_HOST}
-      AWS_DB_URL: ${AWS_DB_URL}
-      AWS_DB_NAME: ${AWS_DB_NAME}
 
     networks:
       - backend
