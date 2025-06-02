@@ -75,9 +75,14 @@ jobs:
             cd ~/product-service
             mv docker-compose.remote.yml docker-compose.yml
           
-            docker compose pull
+            echo "[✔] .env 파일 내용 확인:"
+            cat .env || echo ".env 파일이 없습니다!"
           
+            echo "[✔] 기존 컨테이너 종료 및 제거"
             docker compose down || true
-          
-            docker compose --env-file .env up -d
+            docker rm -f product-service || true
+
+            echo "[✔] 이미지 pull 및 컨테이너 재시작"
+            docker compose pull
+            docker compose up -d
           EOF
