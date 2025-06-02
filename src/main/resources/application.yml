@@ -5,8 +5,11 @@ server:
 spring:
   application:
     name: product-service
-  profiles:
-    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/${LOCAL_DB_NAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
 
   jpa:
     hibernate:
