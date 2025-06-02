@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   board-service:
+    image: ${DOCKER_USERNAME}/product_service:latest
     container_name: product_service
-    image: ${DOCKER_USERNAME}/product_service:latest  # Docker Hub 이미지 사용
     ports:
       - "8083:8083"
     env_file:
@@ -12,6 +12,9 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       EUREKA_HOST: ${EUREKA_HOST}
+      AWS_DB_URL: ${AWS_DB_URL}
+      AWS_DB_NAME: ${AWS_DB_NAME}
+
     networks:
       - backend
 

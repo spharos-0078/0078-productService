@@ -38,6 +38,10 @@ jobs:
         run: |
           echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
           echo "EUREKA_HOST=${{ secrets.EUREKA_HOST }}" >> .env
+          echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> .env
+          echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> .env
+          echo "AWS_DB_URL=${{ secrets.AWS_DB_URL }}" >> .env
+          echo "AWS_DB_NAME=${{ secrets.AWS_DB_NAME }}" >> .env
 
       - name: Build and Push Docker Image to Docker Hub
         uses: docker/build-push-action@v5
@@ -74,7 +78,6 @@ jobs:
             docker compose pull
           
             docker compose down || true
-            docker rm -f product_service || true
           
             docker compose --env-file .env up -d
           EOF
