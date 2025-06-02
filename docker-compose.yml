@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   board-service:
-    image: ${DOCKER_USERNAME}/product_service:latest
-    container_name: product_service
+    image: ${DOCKER_USERNAME}/product-service:latest
+    container_name: product-service
     ports:
       - "8083:8083"
     env_file:
