@@ -1,12 +1,12 @@
+server:
+  port: 8083
+  forward-headers-strategy: framework
+
 spring:
   application:
     name: product-service
-
-  DataSource:
-    url: jdbc:mysql://localhost:3306/product_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
-    username: pieceofcake_tmp
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: local
 
   jpa:
     hibernate:
@@ -15,3 +15,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${EUREKA_HOST}:8761/eureka/
