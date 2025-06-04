@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  board-service:
+    container_name: product-service
+    image: ${DOCKER_USERNAME}/product-service:latest
+    ports:
+      - "8083:8083"
+    env_file:
+      - .env
+
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true
