@@ -18,6 +18,7 @@ public class ProductKafkaProducer {
 
     public void sendProductEvent(ProductEvent productEvent) {
         log.info("Sending ProductEvent: {}", productEvent);
-        CompletableFuture<SendResult<String, ProductEvent>> future = productKafkaTemplate.send("create-product-send-read", productEvent);
+        CompletableFuture<SendResult<String, ProductEvent>> future =
+                productKafkaTemplate.send("create-product-send-read", productEvent);
     }
 }

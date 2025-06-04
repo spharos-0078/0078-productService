@@ -1,7 +1,6 @@
 package com.pieceofcake.product_service.kafka.event;
 
 import com.pieceofcake.product_service.product.entity.ProductStatus;
-import com.pieceofcake.product_service.kafka.dto.ProductImageDto;
 import lombok.*;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class ProductEvent {
     private ProductStatus productStatus;
     private String storageLocation;
     private String description;
-    private List<ProductImageDto> images;
-    private Long mainCategoryId;
-    private Long subCategoryId;
+    private List<ProductImageEvent> images;
+    private Integer mainCategoryId;
+    private Integer subCategoryId;
 }
