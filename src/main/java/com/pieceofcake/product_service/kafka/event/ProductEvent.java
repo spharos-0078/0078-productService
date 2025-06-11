@@ -11,12 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ProductEvent {
+    private String eventType;
     private String productUuid;
     private String productName;
     private Long aiEstimatedPrice;
-    private Long purchasePrice;
-    private ProductStatus productStatus;
-    private String storageLocation;
+//    private Long purchasePrice;
+//    private ProductStatus productStatus;
+//    private String storageLocation;
     private String description;
     private List<ProductImageEvent> images;
     private Integer mainCategoryId;
