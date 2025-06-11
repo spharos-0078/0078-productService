@@ -6,7 +6,7 @@ spring:
   application:
     name: product-service
   profiles:
-    active: local
+    active: dev
 
   jpa:
     hibernate:
