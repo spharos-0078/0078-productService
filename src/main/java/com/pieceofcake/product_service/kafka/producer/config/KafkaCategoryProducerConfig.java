@@ -1,6 +1,6 @@
-package com.pieceofcake.product_service.kafka.config;
+package com.pieceofcake.product_service.kafka.producer.config;
 
-import com.pieceofcake.product_service.kafka.event.ProductEvent;
+import com.pieceofcake.product_service.kafka.producer.event.CategoryNameEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,33 +17,27 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class KafkaConfig {
+public class KafkaCategoryProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;
 
     @Bean
-    public Map<String, Object> productProducerConfigs() {
+    public Map<String, Object> categoryProducerConfigs() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
-//        props.put(ProducerConfig.ACKS_CONFIG, "0");
-//        props.put(ProducerConfig.RETRIES_CONFIG, 3);
-//        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-//        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-//        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         return props;
     }
 
     @Bean
-    public ProducerFactory<String, ProductEvent> productNotification() {
-        return new DefaultKafkaProducerFactory<>(productProducerConfigs());
+    public ProducerFactory<String, CategoryNameEvent> categoryNameNotification() {
+        return new DefaultKafkaProducerFactory<>(categoryProducerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, ProductEvent> productkafkaTemplate() {
-        return new KafkaTemplate<>(productNotification());
+    public KafkaTemplate<String, CategoryNameEvent> kafkaTemplate() {
+        return new KafkaTemplate<>(categoryNameNotification());
     }
 }

@@ -2,9 +2,9 @@ package com.pieceofcake.product_service.product.application;
 
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.common.exception.BaseException;
-import com.pieceofcake.product_service.kafka.event.EventType;
-import com.pieceofcake.product_service.kafka.event.ProductEvent;
-import com.pieceofcake.product_service.kafka.event.ProductImageEvent;
+import com.pieceofcake.product_service.kafka.producer.event.EventType;
+import com.pieceofcake.product_service.kafka.producer.event.ProductEvent;
+import com.pieceofcake.product_service.kafka.producer.event.ProductImageEvent;
 import com.pieceofcake.product_service.kafka.producer.ProductKafkaProducer;
 import com.pieceofcake.product_service.product.dto.in.CreateProductImageRequestDto;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;

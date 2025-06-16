@@ -1,4 +1,4 @@
-package com.pieceofcake.product_service.kafka.event;
+package com.pieceofcake.product_service.kafka.producer.event;
 
 import com.pieceofcake.product_service.product.entity.ProductImage;
 import lombok.Builder;
