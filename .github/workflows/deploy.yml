@@ -38,6 +38,10 @@ jobs:
         run: |
           echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
           echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> .env
+          
+          echo "EC2_HOST2=${{ secrets.EC2_HOST2 }}" >> .env
+          echo "EC2_DB=${{ secrets.EC2_DB }}" >> .env
+          
           echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> .env
           echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> .env
 
