@@ -16,9 +16,21 @@ public class ProductKafkaProducer {
 
     private final KafkaTemplate<String, ProductEvent> productKafkaTemplate;
 
-    public void sendProductEvent(ProductEvent productEvent) {
-        log.info("Sending ProductEvent: {}", productEvent);
+    public void sendCreateProductEvent(ProductEvent productEvent) {
+        log.info("Sending Create ProductEvent: {}", productEvent);
         CompletableFuture<SendResult<String, ProductEvent>> future =
                 productKafkaTemplate.send("create-product-send-read", productEvent);
+    }
+
+    public void sendUpdateProductEvent(ProductEvent productEvent) {
+        log.info("Sending Update ProductEvent: {}", productEvent);
+        CompletableFuture<SendResult<String, ProductEvent>> future =
+                productKafkaTemplate.send("update-product-send-read", productEvent);
+    }
+
+    public void sendDeleteProductEvent(ProductEvent productEvent) {
+        log.info("Sending Delete ProductEvent: {}", productEvent);
+        CompletableFuture<SendResult<String, ProductEvent>> future =
+                productKafkaTemplate.send("delete-product-send-read", productEvent);
     }
 }

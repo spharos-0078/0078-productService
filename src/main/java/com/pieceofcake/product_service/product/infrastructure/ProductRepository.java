@@ -16,6 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Modifying
     @Query("UPDATE Product p SET p.isDeleted = true WHERE p.productUuid = :productUuid")
-    int softDeleteByProductUuid(@Param("productUuid") String productUuid);
+    void softDeleteByProductUuid(@Param("productUuid") String productUuid);
 }
 

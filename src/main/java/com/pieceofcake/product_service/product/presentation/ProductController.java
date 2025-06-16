@@ -1,14 +1,12 @@
 package com.pieceofcake.product_service.product.presentation;
 
-import com.pieceofcake.product_service.product.application.ProductServiceImpl;
 import com.pieceofcake.product_service.common.entity.BaseResponseEntity;
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
+import com.pieceofcake.product_service.product.application.ProductServiceImpl;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
-import com.pieceofcake.product_service.product.dto.in.UpdateProductInfoRequestDto;
 import com.pieceofcake.product_service.product.dto.in.UpdateProductRequestDto;
 import com.pieceofcake.product_service.product.dto.out.GetProductUuidResponseDto;
 import com.pieceofcake.product_service.product.vo.in.CreateProductRequestVo;
-import com.pieceofcake.product_service.product.vo.in.UpdateProductInfoRequestVo;
 import com.pieceofcake.product_service.product.vo.in.UpdateProductRequestVo;
 import com.pieceofcake.product_service.product.vo.out.GetProductUuidResponseVo;
 import lombok.RequiredArgsConstructor;
@@ -36,13 +34,13 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public BaseResponseEntity<List<GetProductUuidResponseVo>> getProductUuidList(){
+    public BaseResponseEntity<List<GetProductUuidResponseVo>> getProductUuidList() {
         return new BaseResponseEntity<>(productService.getProductUuidList().stream()
                 .map(GetProductUuidResponseDto::toVo).toList());
     }
 
     @DeleteMapping("/{productUuid}")
-    public BaseResponseEntity<Void> deleteProduct(@PathVariable String productUuid){
+    public BaseResponseEntity<Void> deleteProduct(@PathVariable String productUuid) {
         productService.deleteProduct(productUuid);
         return new BaseResponseEntity<>(BaseResponseStatus.SUCCESS);
     }

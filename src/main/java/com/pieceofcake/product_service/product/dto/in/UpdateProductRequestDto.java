@@ -2,7 +2,6 @@ package com.pieceofcake.product_service.product.dto.in;
 
 import com.pieceofcake.product_service.product.entity.Product;
 import com.pieceofcake.product_service.product.entity.ProductStatus;
-import com.pieceofcake.product_service.product.vo.in.UpdateProductInfoRequestVo;
 import com.pieceofcake.product_service.product.vo.in.UpdateProductRequestVo;
 import lombok.Builder;
 import lombok.Getter;
