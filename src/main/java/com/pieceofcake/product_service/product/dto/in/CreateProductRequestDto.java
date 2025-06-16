@@ -1,5 +1,7 @@
 package com.pieceofcake.product_service.product.dto.in;
 
+import com.pieceofcake.product_service.category.dto.in.CategoryDto;
+import com.pieceofcake.product_service.category.vo.in.CategoryVo;
 import com.pieceofcake.product_service.product.entity.Product;
 import com.pieceofcake.product_service.product.entity.ProductStatus;
 import com.pieceofcake.product_service.product.vo.in.CreateProductRequestVo;
@@ -17,13 +19,12 @@ public class CreateProductRequestDto {
     private String storageLocation;
     private String description;
     private List<ProductImageRequestDto> productImageRequestDtoList;
-    private Integer mainCategoryId;
-    private Integer subCategoryId;
+    private CategoryDto mainCategory;
+    private CategoryDto subCategory;
 
     @Builder
     public CreateProductRequestDto(String productName, Long aiEstimatedPrice, Long purchasePrice, ProductStatus status,
-                                   String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList,
-                                   Integer mainCategoryId, Integer subCategoryId) {
+                                   String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
         this.purchasePrice = purchasePrice;
@@ -31,9 +32,10 @@ public class CreateProductRequestDto {
         this.storageLocation = storageLocation;
         this.description = description;
         this.productImageRequestDtoList = productImageRequestDtoList;
-        this.mainCategoryId = mainCategoryId;
-        this.subCategoryId = subCategoryId;
+        this.mainCategory = mainCategory;
+        this.subCategory = subCategory;
     }
+
 
     public static CreateProductRequestDto from(CreateProductRequestVo vo){
         return CreateProductRequestDto.builder()
@@ -45,8 +47,8 @@ public class CreateProductRequestDto {
                 .description(vo.getDescription())
                 .productImageRequestDtoList(vo.getProductImageRequestVoList().stream()
                         .map(ProductImageRequestDto::from).toList())
-                .mainCategoryId(vo.getMainCategoryId())
-                .subCategoryId(vo.getSubCategoryId())
+                .mainCategory(CategoryDto.from(vo.getMainCategory()))
+                .subCategory(CategoryDto.from(vo.getSubCategory()))
                 .build();
     }
 

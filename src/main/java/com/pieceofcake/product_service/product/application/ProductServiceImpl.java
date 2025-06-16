@@ -2,8 +2,9 @@ package com.pieceofcake.product_service.product.application;
 
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.common.exception.BaseException;
-import com.pieceofcake.product_service.kafka.event.ProductEvent;
-import com.pieceofcake.product_service.kafka.event.ProductImageEvent;
+import com.pieceofcake.product_service.kafka.producer.event.EventType;
+import com.pieceofcake.product_service.kafka.producer.event.ProductEvent;
+import com.pieceofcake.product_service.kafka.producer.event.ProductImageEvent;
 import com.pieceofcake.product_service.kafka.producer.ProductKafkaProducer;
 import com.pieceofcake.product_service.product.dto.in.CreateProductImageRequestDto;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
@@ -37,34 +38,30 @@ public class ProductServiceImpl implements ProductService {
         String productUuid = UUID.randomUUID().toString();
         Product product = productRepository.save(createProductRequestDto.toEntity(productUuid));
 
-        // 단순 저장이기 때문에 repo호출
-        List<ProductImage> productImageList = productImageRepository.saveAll(CreateProductImageRequestDto.of( // 영상
+        List<ProductImage> productImageList = productImageRepository.saveAll(CreateProductImageRequestDto.of(
                         productUuid, createProductRequestDto.getProductImageRequestDtoList())
                 .getProductImageRequestDtoList()
                 .stream()
                 .map(dto -> dto.toEntity(productUuid))
                 .toList());
 
-        // 트랜잭션 커밋 후 Kafka 메시지 발행
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
                 ProductEvent event = ProductEvent.builder()
+                        .eventType(EventType.CREATE)
                         .productUuid(product.getProductUuid())
                         .productName(product.getProductName())
                         .aiEstimatedPrice(product.getAiEstimatedPrice())
-                        .purchasePrice(product.getPurchasePrice())
-                        .productStatus(product.getProductStatus())
-                        .storageLocation(product.getStorageLocation())
                         .description(product.getDescription())
                         .images(productImageList.stream()
                                 .map(ProductImageEvent::from)
                                 .toList())
-                        .mainCategoryId(createProductRequestDto.getMainCategoryId())
-                        .subCategoryId(createProductRequestDto.getSubCategoryId())
+                        .mainCategory(createProductRequestDto.getMainCategory().toEvent())
+                        .subCategory(createProductRequestDto.getSubCategory().toEvent())
                         .build();
 
-                productKafkaProducer.sendProductEvent(event);
+                productKafkaProducer.sendCreateProductEvent(event);
             }
         });
     }
@@ -75,7 +72,41 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findByProductUuid(updateProductRequestDto.getProductUuid())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
 
-        productRepository.save(updateProductRequestDto.toEntity(product));
+        Product newProduct = productRepository.save(updateProductRequestDto.toEntity(product));
+
+        final List<ProductImage> newProductImageList;
+        if (updateProductRequestDto.getProductImageRequestDtoList() == null) {
+            newProductImageList = productImageRepository.findAllByProductUuid(updateProductRequestDto.getProductUuid());
+        } else {
+            productImageRepository.deleteALlByProductUuid(updateProductRequestDto.getProductUuid());
+            newProductImageList = productImageRepository.saveAll(CreateProductImageRequestDto.of(
+                            updateProductRequestDto.getProductUuid(), updateProductRequestDto.getProductImageRequestDtoList())
+                    .getProductImageRequestDtoList()
+                    .stream()
+                    .map(dto -> dto.toEntity(updateProductRequestDto.getProductUuid()))
+                    .toList());
+        }
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                ProductEvent event = ProductEvent.builder()
+                        .eventType(EventType.UPDATE)
+                        .productUuid(newProduct.getProductUuid())
+                        .productName(newProduct.getProductName())
+                        .aiEstimatedPrice(newProduct.getAiEstimatedPrice())
+                        .description(newProduct.getDescription())
+                        .images(newProductImageList.stream()
+                                .map(ProductImageEvent::from)
+                                .toList())
+                        .mainCategory(updateProductRequestDto.getMainCategory().toEvent())
+                        .subCategory(updateProductRequestDto.getSubCategory().toEvent())
+                        .build();
+
+                productKafkaProducer.sendUpdateProductEvent(event);
+            }
+        });
+
     }
 
     @Override
@@ -88,5 +119,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String productUuid) {
         productRepository.softDeleteByProductUuid(productUuid);
+        productImageRepository.deleteALlByProductUuid(productUuid);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                ProductEvent event = ProductEvent.builder()
+                        .eventType(EventType.DELETE)
+                        .productUuid(productUuid)
+                        .build();
+                productKafkaProducer.sendDeleteProductEvent(event);
+            }
+        });
     }
 }
