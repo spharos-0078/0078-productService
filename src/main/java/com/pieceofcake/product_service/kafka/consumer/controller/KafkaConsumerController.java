@@ -15,16 +15,16 @@ public class KafkaConsumerController {
 
     private final ProductCategoryServiceImpl productCategoryService;
 
-    @KafkaListener(topics = "create-product", groupId = "product-enrichment-group", containerFactory = "productEnrichmentListenerFactory")
-    public void consumeCreateProductCategoryEvent(ProductReadEvent productReadEvent) {
-        log.info("get create read topic {}", productReadEvent);
-        productCategoryService.createCategoryNameRead(CreateCategoryNameEventDto.from(productReadEvent));
-    }
-
-    @KafkaListener(topics = "update-product", groupId = "product-enrichment-group", containerFactory = "productEnrichmentListenerFactory")
-    public void consumeUpdateProductCategoryEvent(ProductReadEvent productReadEvent) {
-        log.info("get update read topic {}", productReadEvent);
-        productCategoryService.createCategoryNameRead(CreateCategoryNameEventDto.from(productReadEvent));
-    }
+//    @KafkaListener(topics = "create-product", groupId = "product-enrichment-group", containerFactory = "productEnrichmentListenerFactory")
+//    public void consumeCreateProductCategoryEvent(ProductReadEvent productReadEvent) {
+//        log.info("get create read topic {}", productReadEvent);
+//        productCategoryService.createCategoryNameRead(CreateCategoryNameEventDto.from(productReadEvent));
+//    }
+//
+//    @KafkaListener(topics = "update-product", groupId = "product-enrichment-group", containerFactory = "productEnrichmentListenerFactory")
+//    public void consumeUpdateProductCategoryEvent(ProductReadEvent productReadEvent) {
+//        log.info("get update read topic {}", productReadEvent);
+//        productCategoryService.createCategoryNameRead(CreateCategoryNameEventDto.from(productReadEvent));
+//    }
 }
 

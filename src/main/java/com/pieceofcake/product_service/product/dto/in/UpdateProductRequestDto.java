@@ -1,5 +1,6 @@
 package com.pieceofcake.product_service.product.dto.in;
 
+import com.pieceofcake.product_service.category.dto.in.CategoryDto;
 import com.pieceofcake.product_service.product.entity.Product;
 import com.pieceofcake.product_service.product.entity.ProductStatus;
 import com.pieceofcake.product_service.product.vo.in.UpdateProductRequestVo;
@@ -18,12 +19,12 @@ public class UpdateProductRequestDto {
     private String storageLocation;
     private String description;
     private List<ProductImageRequestDto> productImageRequestDtoList;
-    private Integer mainCategoryId;
-    private Integer subCategoryId;
+    private CategoryDto mainCategory;
+    private CategoryDto subCategory;
 
     @Builder
-    public UpdateProductRequestDto(String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice, ProductStatus productStatus,
-                                   String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, Integer mainCategoryId, Integer subCategoryId) {
+    public UpdateProductRequestDto(String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice,
+                                   ProductStatus productStatus, String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
         this.productUuid = productUuid;
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
@@ -32,8 +33,8 @@ public class UpdateProductRequestDto {
         this.storageLocation = storageLocation;
         this.description = description;
         this.productImageRequestDtoList = productImageRequestDtoList;
-        this.mainCategoryId = mainCategoryId;
-        this.subCategoryId = subCategoryId;
+        this.mainCategory = mainCategory;
+        this.subCategory = subCategory;
     }
 
     public static UpdateProductRequestDto from(UpdateProductRequestVo vo) {
@@ -49,8 +50,8 @@ public class UpdateProductRequestDto {
                         vo.getProductImageRequestVoList().stream()
                                 .map(ProductImageRequestDto::from)
                                 .toList())
-                .mainCategoryId(vo.getMainCategoryId())
-                .subCategoryId(vo.getSubCategoryId())
+                .mainCategory(CategoryDto.from(vo.getMainCategory()))
+                .subCategory(CategoryDto.from(vo.getSubCategory()))
                 .build();
     }
 

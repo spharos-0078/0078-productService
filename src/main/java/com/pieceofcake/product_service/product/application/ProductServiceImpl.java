@@ -57,8 +57,8 @@ public class ProductServiceImpl implements ProductService {
                         .images(productImageList.stream()
                                 .map(ProductImageEvent::from)
                                 .toList())
-                        .mainCategoryId(createProductRequestDto.getMainCategoryId())
-                        .subCategoryId(createProductRequestDto.getSubCategoryId())
+                        .mainCategory(createProductRequestDto.getMainCategory().toEvent())
+                        .subCategory(createProductRequestDto.getSubCategory().toEvent())
                         .build();
 
                 productKafkaProducer.sendCreateProductEvent(event);
@@ -99,8 +99,8 @@ public class ProductServiceImpl implements ProductService {
                         .images(newProductImageList.stream()
                                 .map(ProductImageEvent::from)
                                 .toList())
-                        .mainCategoryId(updateProductRequestDto.getMainCategoryId())
-                        .subCategoryId(updateProductRequestDto.getSubCategoryId())
+                        .mainCategory(updateProductRequestDto.getMainCategory().toEvent())
+                        .subCategory(updateProductRequestDto.getSubCategory().toEvent())
                         .build();
 
                 productKafkaProducer.sendUpdateProductEvent(event);

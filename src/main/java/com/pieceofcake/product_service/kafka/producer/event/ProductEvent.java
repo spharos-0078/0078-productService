@@ -16,6 +16,6 @@ public class ProductEvent {
     private Long aiEstimatedPrice;
     private String description;
     private List<ProductImageEvent> images;
-    private Integer mainCategoryId;
-    private Integer subCategoryId;
+    private CategoryEvent mainCategory;
+    private CategoryEvent subCategory;
 }

@@ -1,5 +1,6 @@
 package com.pieceofcake.product_service.product.vo.in;
 
+import com.pieceofcake.product_service.category.vo.in.CategoryVo;
 import com.pieceofcake.product_service.product.dto.in.ProductImageRequestDto;
 import com.pieceofcake.product_service.product.entity.ProductStatus;
 import lombok.Builder;
@@ -17,12 +18,12 @@ public class UpdateProductRequestVo {
     private String storageLocation;
     private String description;
     private List<ProductImageRequestVo> productImageRequestVoList;
-    private Integer mainCategoryId;
-    private Integer subCategoryId;
+    private CategoryVo mainCategory;
+    private CategoryVo subCategory;
 
     @Builder
-    public UpdateProductRequestVo(String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice, ProductStatus productStatus,
-                                  String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList, Integer mainCategoryId, Integer subCategoryId) {
+    public UpdateProductRequestVo(String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice,
+                                  ProductStatus productStatus, String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList, CategoryVo mainCategory, CategoryVo subCategory) {
         this.productUuid = productUuid;
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
@@ -31,7 +32,7 @@ public class UpdateProductRequestVo {
         this.storageLocation = storageLocation;
         this.description = description;
         this.productImageRequestVoList = productImageRequestVoList;
-        this.mainCategoryId = mainCategoryId;
-        this.subCategoryId = subCategoryId;
+        this.mainCategory = mainCategory;
+        this.subCategory = subCategory;
     }
 }
