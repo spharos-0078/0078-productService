@@ -13,6 +13,7 @@ public class UpdateProductRequestVo {
     private String productUuid;
     private String productName;
     private Long aiEstimatedPrice;
+    private String aiEstimatedDescription;
     private Long purchasePrice;
     private ProductStatus productStatus;
     private String storageLocation;
@@ -22,11 +23,12 @@ public class UpdateProductRequestVo {
     private CategoryVo subCategory;
 
     @Builder
-    public UpdateProductRequestVo(String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice,
-                                  ProductStatus productStatus, String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList, CategoryVo mainCategory, CategoryVo subCategory) {
+    public UpdateProductRequestVo(String productUuid, String productName, Long aiEstimatedPrice, String aiEstimatedDescription,
+                                  Long purchasePrice, ProductStatus productStatus, String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList, CategoryVo mainCategory, CategoryVo subCategory) {
         this.productUuid = productUuid;
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
+        this.aiEstimatedDescription = aiEstimatedDescription;
         this.purchasePrice = purchasePrice;
         this.productStatus = productStatus;
         this.storageLocation = storageLocation;

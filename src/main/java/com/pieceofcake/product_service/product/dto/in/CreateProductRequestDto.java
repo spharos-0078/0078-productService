@@ -14,6 +14,7 @@ import java.util.List;
 public class CreateProductRequestDto {
     private String productName;
     private Long aiEstimatedPrice;
+    private String aiEstimatedDescription;
     private Long purchasePrice;
     private ProductStatus status;
     private String storageLocation;
@@ -23,10 +24,11 @@ public class CreateProductRequestDto {
     private CategoryDto subCategory;
 
     @Builder
-    public CreateProductRequestDto(String productName, Long aiEstimatedPrice, Long purchasePrice, ProductStatus status,
-                                   String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
+    public CreateProductRequestDto(String productName, Long aiEstimatedPrice, String aiEstimatedDescription,
+                                   Long purchasePrice, ProductStatus status, String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
+        this.aiEstimatedDescription = aiEstimatedDescription;
         this.purchasePrice = purchasePrice;
         this.status = status;
         this.storageLocation = storageLocation;
@@ -41,6 +43,7 @@ public class CreateProductRequestDto {
         return CreateProductRequestDto.builder()
                 .productName(vo.getProductName())
                 .aiEstimatedPrice(vo.getAiEstimatedPrice())
+                .aiEstimatedDescription(vo.getAiEstimatedDescription())
                 .purchasePrice(vo.getPurchasePrice())
                 .status(vo.getStatus())
                 .storageLocation(vo.getStorageLocation())
@@ -58,6 +61,7 @@ public class CreateProductRequestDto {
                 .productUuid(productUuid)
                 .productName(productName)
                 .aiEstimatedPrice(aiEstimatedPrice)
+                .aiEstimatedDescription(aiEstimatedDescription)
                 .purchasePrice(purchasePrice)
                 .productStatus(status)
                 .storageLocation(storageLocation)

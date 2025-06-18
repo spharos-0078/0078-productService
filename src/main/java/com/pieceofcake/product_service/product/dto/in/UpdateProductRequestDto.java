@@ -14,6 +14,7 @@ public class UpdateProductRequestDto {
     private String productUuid;
     private String productName;
     private Long aiEstimatedPrice;
+    private String aiEstimatedDescription;
     private Long purchasePrice;
     private ProductStatus productStatus;
     private String storageLocation;
@@ -23,11 +24,12 @@ public class UpdateProductRequestDto {
     private CategoryDto subCategory;
 
     @Builder
-    public UpdateProductRequestDto(String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice,
-                                   ProductStatus productStatus, String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
+    public UpdateProductRequestDto(String productUuid, String productName, Long aiEstimatedPrice, String aiEstimatedDescription,
+                                   Long purchasePrice, ProductStatus productStatus, String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
         this.productUuid = productUuid;
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
+        this.aiEstimatedDescription = aiEstimatedDescription;
         this.purchasePrice = purchasePrice;
         this.productStatus = productStatus;
         this.storageLocation = storageLocation;
@@ -42,6 +44,7 @@ public class UpdateProductRequestDto {
                 .productUuid(vo.getProductUuid())
                 .productName(vo.getProductName())
                 .aiEstimatedPrice(vo.getAiEstimatedPrice())
+                .aiEstimatedDescription(vo.getAiEstimatedDescription())
                 .purchasePrice(vo.getPurchasePrice())
                 .productStatus(vo.getProductStatus())
                 .storageLocation(vo.getStorageLocation())
@@ -61,6 +64,7 @@ public class UpdateProductRequestDto {
                 .productUuid(product.getProductUuid())
                 .productName(productName == null ? product.getProductName() : productName)
                 .aiEstimatedPrice(aiEstimatedPrice == null ? product.getAiEstimatedPrice() : aiEstimatedPrice)
+                .aiEstimatedDescription(aiEstimatedDescription == null ? product.getAiEstimatedDescription() : aiEstimatedDescription)
                 .purchasePrice(purchasePrice == null ? product.getPurchasePrice() : purchasePrice)
                 .productStatus(productStatus == null ? product.getProductStatus() : productStatus)
                 .storageLocation(storageLocation == null ? product.getStorageLocation() : storageLocation)

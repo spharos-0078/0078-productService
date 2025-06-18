@@ -25,6 +25,9 @@ public class Product extends BaseEntity {
     @Column(name = "ai_estimated_price", nullable = false)
     private Long aiEstimatedPrice;
 
+    @Column(name = "ai_estimated_description")
+    private String aiEstimatedDescription;
+
     @Column(name = "purchase_price", nullable = false)
     private Long purchasePrice;
 
@@ -43,15 +46,17 @@ public class Product extends BaseEntity {
     private Boolean isDeleted = false;
 
     @Builder
-    public Product(Long id, String productUuid, String productName, Long aiEstimatedPrice, Long purchasePrice,
-                   ProductStatus productStatus, String storageLocation, String description) {
+    public Product(Long id, String productUuid, String productName, Long aiEstimatedPrice, String aiEstimatedDescription,
+                   Long purchasePrice, ProductStatus productStatus, String storageLocation, String description, Boolean isDeleted) {
         this.id = id;
         this.productUuid = productUuid;
         this.productName = productName;
         this.aiEstimatedPrice = aiEstimatedPrice;
+        this.aiEstimatedDescription = aiEstimatedDescription;
         this.purchasePrice = purchasePrice;
         this.productStatus = productStatus;
         this.storageLocation = storageLocation;
         this.description = description;
+        this.isDeleted = isDeleted;
     }
 }
