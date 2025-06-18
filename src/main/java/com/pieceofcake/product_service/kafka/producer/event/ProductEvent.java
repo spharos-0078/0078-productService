@@ -14,6 +14,7 @@ public class ProductEvent {
     private String productUuid;
     private String productName;
     private Long aiEstimatedPrice;
+    private String aiEstimatedDescription;
     private String description;
     private List<ProductImageEvent> images;
     private CategoryEvent mainCategory;
