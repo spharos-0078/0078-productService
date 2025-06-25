@@ -44,6 +44,8 @@ jobs:
           
           echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> .env
           echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> .env
+          
+          echo "GPT_API_KEY=${{ secrets.GPT_API_KEY }}" >> .env
 
 
       - name: Build and Push Docker Image to Docker Hub

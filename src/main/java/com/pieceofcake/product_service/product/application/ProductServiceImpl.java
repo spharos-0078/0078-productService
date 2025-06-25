@@ -1,11 +1,13 @@
 package com.pieceofcake.product_service.product.application;
 
+import com.pieceofcake.product_service.ai.application.AiServiceImpl;
+import com.pieceofcake.product_service.ai.dto.in.AiRequestDto;
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.common.exception.BaseException;
+import com.pieceofcake.product_service.kafka.producer.ProductKafkaProducer;
 import com.pieceofcake.product_service.kafka.producer.event.EventType;
 import com.pieceofcake.product_service.kafka.producer.event.ProductEvent;
 import com.pieceofcake.product_service.kafka.producer.event.ProductImageEvent;
-import com.pieceofcake.product_service.kafka.producer.ProductKafkaProducer;
 import com.pieceofcake.product_service.product.dto.in.CreateProductImageRequestDto;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
 import com.pieceofcake.product_service.product.dto.in.UpdateProductRequestDto;
@@ -23,11 +25,14 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final AiServiceImpl aiService;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
     private final ProductKafkaProducer productKafkaProducer;
@@ -36,7 +41,25 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void createProduct(CreateProductRequestDto createProductRequestDto) {
         String productUuid = UUID.randomUUID().toString();
-        Product product = productRepository.save(createProductRequestDto.toEntity(productUuid));
+        String result = aiService.getAnswer(AiRequestDto.of(createProductRequestDto.getDescription(),
+                        createProductRequestDto.getProductImageRequestDtoList().get(0).getFileName()))
+                .getResult();
+
+        Pattern pattern = Pattern.compile("[\\d,]+\\.");
+        Matcher matcher = pattern.matcher(result);
+
+        String price = "";
+        String aiDescription = "";
+
+        if (matcher.find()) {
+            price = matcher.group(); // ₩11,500,000.
+            // 마침표(.) 포함되므로 제거
+            price = price.replace(".", "").trim();
+            aiDescription = result.substring(matcher.end()).trim().replaceAll("^\"|\"$", ""); // 가격 뒤부터 나머지 설명 추출
+        }
+
+        Product product = productRepository.save(createProductRequestDto
+                .toEntity(productUuid, Long.parseLong(price.replace(",", "")), aiDescription));
 
         List<ProductImage> productImageList = productImageRepository.saveAll(CreateProductImageRequestDto.of(
                         productUuid, createProductRequestDto.getProductImageRequestDtoList())

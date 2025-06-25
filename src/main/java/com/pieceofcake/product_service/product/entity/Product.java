@@ -2,13 +2,11 @@ package com.pieceofcake.product_service.product.entity;
 
 import com.pieceofcake.product_service.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Entity
 public class Product extends BaseEntity {
     @Id
@@ -25,7 +23,8 @@ public class Product extends BaseEntity {
     @Column(name = "ai_estimated_price", nullable = false)
     private Long aiEstimatedPrice;
 
-    @Column(name = "ai_estimated_description")
+    @Lob
+    @Column(name = "ai_estimated_description", columnDefinition = "LONGTEXT")
     private String aiEstimatedDescription;
 
     @Column(name = "purchase_price", nullable = false)
@@ -39,24 +38,10 @@ public class Product extends BaseEntity {
     private String storageLocation;
 
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
     private String description;
 
+    @Builder.Default
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
-
-    @Builder
-    public Product(Long id, String productUuid, String productName, Long aiEstimatedPrice, String aiEstimatedDescription,
-                   Long purchasePrice, ProductStatus productStatus, String storageLocation, String description, Boolean isDeleted) {
-        this.id = id;
-        this.productUuid = productUuid;
-        this.productName = productName;
-        this.aiEstimatedPrice = aiEstimatedPrice;
-        this.aiEstimatedDescription = aiEstimatedDescription;
-        this.purchasePrice = purchasePrice;
-        this.productStatus = productStatus;
-        this.storageLocation = storageLocation;
-        this.description = description;
-        this.isDeleted = isDeleted;
-    }
 }
