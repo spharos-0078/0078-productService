@@ -1,7 +1,6 @@
 package com.pieceofcake.product_service.product.dto.in;
 
 import com.pieceofcake.product_service.category.dto.in.CategoryDto;
-import com.pieceofcake.product_service.category.vo.in.CategoryVo;
 import com.pieceofcake.product_service.product.entity.Product;
 import com.pieceofcake.product_service.product.entity.ProductStatus;
 import com.pieceofcake.product_service.product.vo.in.CreateProductRequestVo;
@@ -13,8 +12,6 @@ import java.util.List;
 @Getter
 public class CreateProductRequestDto {
     private String productName;
-    private Long aiEstimatedPrice;
-    private String aiEstimatedDescription;
     private Long purchasePrice;
     private ProductStatus status;
     private String storageLocation;
@@ -24,11 +21,10 @@ public class CreateProductRequestDto {
     private CategoryDto subCategory;
 
     @Builder
-    public CreateProductRequestDto(String productName, Long aiEstimatedPrice, String aiEstimatedDescription,
-                                   Long purchasePrice, ProductStatus status, String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList, CategoryDto mainCategory, CategoryDto subCategory) {
+    public CreateProductRequestDto(String productName, Long purchasePrice, ProductStatus status,
+                                   String storageLocation, String description, List<ProductImageRequestDto> productImageRequestDtoList,
+                                   CategoryDto mainCategory, CategoryDto subCategory) {
         this.productName = productName;
-        this.aiEstimatedPrice = aiEstimatedPrice;
-        this.aiEstimatedDescription = aiEstimatedDescription;
         this.purchasePrice = purchasePrice;
         this.status = status;
         this.storageLocation = storageLocation;
@@ -39,11 +35,9 @@ public class CreateProductRequestDto {
     }
 
 
-    public static CreateProductRequestDto from(CreateProductRequestVo vo){
+    public static CreateProductRequestDto from(CreateProductRequestVo vo) {
         return CreateProductRequestDto.builder()
                 .productName(vo.getProductName())
-                .aiEstimatedPrice(vo.getAiEstimatedPrice())
-                .aiEstimatedDescription(vo.getAiEstimatedDescription())
                 .purchasePrice(vo.getPurchasePrice())
                 .status(vo.getStatus())
                 .storageLocation(vo.getStorageLocation())
@@ -55,8 +49,7 @@ public class CreateProductRequestDto {
                 .build();
     }
 
-
-    public Product toEntity(String productUuid){
+    public Product toEntity(String productUuid, Long aiEstimatedPrice, String aiEstimatedDescription) {
         return Product.builder()
                 .productUuid(productUuid)
                 .productName(productName)

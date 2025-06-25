@@ -10,8 +10,6 @@ import java.util.List;
 @Getter
 public class CreateProductRequestVo {
     private String productName;
-    private Long aiEstimatedPrice;
-    private String aiEstimatedDescription;
     private Long purchasePrice;
     private ProductStatus status;
     private String storageLocation;
@@ -21,11 +19,10 @@ public class CreateProductRequestVo {
     private CategoryVo subCategory;
 
     @Builder
-    public CreateProductRequestVo(String productName, Long aiEstimatedPrice, String aiEstimatedDescription, Long purchasePrice,
-                                  ProductStatus status, String storageLocation, String description, List<ProductImageRequestVo> productImageRequestVoList, CategoryVo mainCategory, CategoryVo subCategory) {
+    public CreateProductRequestVo(String productName, Long purchasePrice, ProductStatus status, String storageLocation,
+                                  String description, List<ProductImageRequestVo> productImageRequestVoList, CategoryVo mainCategory,
+                                  CategoryVo subCategory) {
         this.productName = productName;
-        this.aiEstimatedPrice = aiEstimatedPrice;
-        this.aiEstimatedDescription = aiEstimatedDescription;
         this.purchasePrice = purchasePrice;
         this.status = status;
         this.storageLocation = storageLocation;
