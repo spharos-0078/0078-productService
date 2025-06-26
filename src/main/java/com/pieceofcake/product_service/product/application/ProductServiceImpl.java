@@ -8,6 +8,7 @@ import com.pieceofcake.product_service.kafka.producer.ProductKafkaProducer;
 import com.pieceofcake.product_service.kafka.producer.event.EventType;
 import com.pieceofcake.product_service.kafka.producer.event.ProductEvent;
 import com.pieceofcake.product_service.kafka.producer.event.ProductImageEvent;
+import com.pieceofcake.product_service.kafka.producer.event.ProductStatusEvent;
 import com.pieceofcake.product_service.product.dto.in.CreateProductImageRequestDto;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
 import com.pieceofcake.product_service.product.dto.in.UpdateProductRequestDto;
@@ -167,6 +168,27 @@ public class ProductServiceImpl implements ProductService {
                         .productUuid(productUuid)
                         .build();
                 productKafkaProducer.sendDeleteProductEvent(event);
+            }
+        });
+    }
+
+    @Transactional
+    @Override
+    public void updateProductStatus(String productUuid, ProductStatus productStatus) {
+        Product product = productRepository.findByProductUuid(productUuid).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)
+        );
+
+        product.updateProductStatus(productStatus);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                ProductStatusEvent event = ProductStatusEvent.builder()
+                        .productUuid(productUuid)
+                        .productStatus(productStatus)
+                        .build();
+                productKafkaProducer.sendUpdateProductStatusEvent(event);
             }
         });
     }

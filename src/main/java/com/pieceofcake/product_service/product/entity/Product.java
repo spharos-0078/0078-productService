@@ -48,4 +48,8 @@ public class Product extends BaseEntity {
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
+
+    public void updateProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
+    }
 }

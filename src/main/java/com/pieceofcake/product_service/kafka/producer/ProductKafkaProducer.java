@@ -1,6 +1,7 @@
 package com.pieceofcake.product_service.kafka.producer;
 
 import com.pieceofcake.product_service.kafka.producer.event.ProductEvent;
+import com.pieceofcake.product_service.kafka.producer.event.ProductStatusEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class ProductKafkaProducer {
 
     private final KafkaTemplate<String, ProductEvent> productKafkaTemplate;
+    private final KafkaTemplate<String, ProductStatusEvent> productStatusKafkaTemplate;
 
     public void sendCreateProductEvent(ProductEvent productEvent) {
         log.info("Sending Create ProductEvent: {}", productEvent);
@@ -32,5 +34,11 @@ public class ProductKafkaProducer {
         log.info("Sending Delete ProductEvent: {}", productEvent);
         CompletableFuture<SendResult<String, ProductEvent>> future =
                 productKafkaTemplate.send("delete-product", productEvent);
+    }
+
+    public void sendUpdateProductStatusEvent(ProductStatusEvent productStatusEvent) {
+        log.info("Sending Update ProductStatusEvent: {}", productStatusEvent);
+        CompletableFuture<SendResult<String, ProductStatusEvent>> future =
+                productStatusKafkaTemplate.send("update-product-status", productStatusEvent);
     }
 }
