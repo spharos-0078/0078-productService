@@ -8,6 +8,7 @@ import com.pieceofcake.product_service.kafka.producer.ProductKafkaProducer;
 import com.pieceofcake.product_service.kafka.producer.event.EventType;
 import com.pieceofcake.product_service.kafka.producer.event.ProductEvent;
 import com.pieceofcake.product_service.kafka.producer.event.ProductImageEvent;
+import com.pieceofcake.product_service.kafka.producer.event.ProductStatusEvent;
 import com.pieceofcake.product_service.product.dto.in.CreateProductImageRequestDto;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
 import com.pieceofcake.product_service.product.dto.in.UpdateProductRequestDto;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -77,12 +79,17 @@ public class ProductServiceImpl implements ProductService {
                         .productName(product.getProductName())
                         .aiEstimatedPrice(product.getAiEstimatedPrice())
                         .aiEstimatedDescription(product.getAiEstimatedDescription())
+                        .productStatus(product.getProductStatus())
+                        .storageLocation(product.getStorageLocation())
+                        .purchasePrice(product.getPurchasePrice())
                         .description(product.getDescription())
                         .images(productImageList.stream()
                                 .map(ProductImageEvent::from)
                                 .toList())
                         .mainCategory(createProductRequestDto.getMainCategory().toEvent())
                         .subCategory(createProductRequestDto.getSubCategory().toEvent())
+                        .createdAt(product.getCreatedAt())
+                        .updatedAt(product.getUpdatedAt())
                         .build();
 
                 productKafkaProducer.sendCreateProductEvent(event);
@@ -95,8 +102,10 @@ public class ProductServiceImpl implements ProductService {
     public void updateProduct(UpdateProductRequestDto updateProductRequestDto) {
         Product product = productRepository.findByProductUuid(updateProductRequestDto.getProductUuid())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        LocalDateTime createdAt = product.getCreatedAt();
 
         Product newProduct = productRepository.save(updateProductRequestDto.toEntity(product));
+        System.out.println("newCreatedAt: " + newProduct.getCreatedAt());
 
         final List<ProductImage> newProductImageList;
         if (updateProductRequestDto.getProductImageRequestDtoList() == null) {
@@ -120,12 +129,17 @@ public class ProductServiceImpl implements ProductService {
                         .productName(newProduct.getProductName())
                         .aiEstimatedPrice(newProduct.getAiEstimatedPrice())
                         .aiEstimatedDescription(newProduct.getAiEstimatedDescription())
+                        .productStatus(product.getProductStatus())
+                        .storageLocation(product.getStorageLocation())
+                        .purchasePrice(product.getPurchasePrice())
                         .description(newProduct.getDescription())
                         .images(newProductImageList.stream()
                                 .map(ProductImageEvent::from)
                                 .toList())
                         .mainCategory(updateProductRequestDto.getMainCategory().toEvent())
                         .subCategory(updateProductRequestDto.getSubCategory().toEvent())
+                        .createdAt(createdAt)
+                        .updatedAt(newProduct.getUpdatedAt())
                         .build();
 
                 productKafkaProducer.sendUpdateProductEvent(event);
@@ -154,6 +168,27 @@ public class ProductServiceImpl implements ProductService {
                         .productUuid(productUuid)
                         .build();
                 productKafkaProducer.sendDeleteProductEvent(event);
+            }
+        });
+    }
+
+    @Transactional
+    @Override
+    public void updateProductStatus(String productUuid, ProductStatus productStatus) {
+        Product product = productRepository.findByProductUuid(productUuid).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT)
+        );
+
+        product.updateProductStatus(productStatus);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                ProductStatusEvent event = ProductStatusEvent.builder()
+                        .productUuid(productUuid)
+                        .productStatus(productStatus)
+                        .build();
+                productKafkaProducer.sendUpdateProductStatusEvent(event);
             }
         });
     }
