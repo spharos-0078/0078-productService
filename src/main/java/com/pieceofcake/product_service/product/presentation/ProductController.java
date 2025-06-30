@@ -4,9 +4,11 @@ import com.pieceofcake.product_service.common.entity.BaseResponseEntity;
 import com.pieceofcake.product_service.common.entity.BaseResponseStatus;
 import com.pieceofcake.product_service.product.application.ProductServiceImpl;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
+import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto2;
 import com.pieceofcake.product_service.product.dto.in.UpdateProductRequestDto;
 import com.pieceofcake.product_service.product.dto.out.GetProductUuidResponseDto;
 import com.pieceofcake.product_service.product.vo.in.CreateProductRequestVo;
+import com.pieceofcake.product_service.product.vo.in.CreateProductRequestVo2;
 import com.pieceofcake.product_service.product.vo.in.UpdateProductRequestVo;
 import com.pieceofcake.product_service.product.vo.out.GetProductUuidResponseVo;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,12 @@ public class ProductController {
     @PostMapping
     public BaseResponseEntity<Void> createProduct(@RequestBody CreateProductRequestVo createProductRequestVo) {
         productService.createProduct(CreateProductRequestDto.from(createProductRequestVo));
+        return new BaseResponseEntity<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @PostMapping("/no-ai")
+    public BaseResponseEntity<Void> createProduct(@RequestBody CreateProductRequestVo2 createProductRequestVo) {
+        productService.createProduct(CreateProductRequestDto2.from(createProductRequestVo));
         return new BaseResponseEntity<>(BaseResponseStatus.SUCCESS);
     }
 

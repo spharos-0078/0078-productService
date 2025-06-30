@@ -11,6 +11,7 @@ import com.pieceofcake.product_service.kafka.producer.event.ProductImageEvent;
 import com.pieceofcake.product_service.kafka.producer.event.ProductStatusEvent;
 import com.pieceofcake.product_service.product.dto.in.CreateProductImageRequestDto;
 import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto;
+import com.pieceofcake.product_service.product.dto.in.CreateProductRequestDto2;
 import com.pieceofcake.product_service.product.dto.in.UpdateProductRequestDto;
 import com.pieceofcake.product_service.product.dto.out.GetProductUuidResponseDto;
 import com.pieceofcake.product_service.product.entity.Product;
@@ -38,6 +39,47 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
     private final ProductKafkaProducer productKafkaProducer;
+
+    @Transactional
+    @Override
+    public void createProduct(CreateProductRequestDto2 createProductRequestDto) {
+        String productUuid = UUID.randomUUID().toString();
+
+        Product product = productRepository.save(createProductRequestDto.toEntity(productUuid));
+
+        List<ProductImage> productImageList = productImageRepository.saveAll(CreateProductImageRequestDto.of(
+                        productUuid, createProductRequestDto.getProductImageRequestDtoList())
+                .getProductImageRequestDtoList()
+                .stream()
+                .map(dto -> dto.toEntity(productUuid))
+                .toList());
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                ProductEvent event = ProductEvent.builder()
+                        .eventType(EventType.CREATE)
+                        .productUuid(product.getProductUuid())
+                        .productName(product.getProductName())
+                        .aiEstimatedPrice(product.getAiEstimatedPrice())
+                        .aiEstimatedDescription(product.getAiEstimatedDescription())
+                        .productStatus(product.getProductStatus())
+                        .storageLocation(product.getStorageLocation())
+                        .purchasePrice(product.getPurchasePrice())
+                        .description(product.getDescription())
+                        .images(productImageList.stream()
+                                .map(ProductImageEvent::from)
+                                .toList())
+                        .mainCategory(createProductRequestDto.getMainCategory().toEvent())
+                        .subCategory(createProductRequestDto.getSubCategory().toEvent())
+                        .createdAt(product.getCreatedAt())
+                        .updatedAt(product.getUpdatedAt())
+                        .build();
+
+                productKafkaProducer.sendCreateProductEvent(event);
+            }
+        });
+    }
 
     @Transactional
     @Override
