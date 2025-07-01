@@ -20,18 +20,6 @@ public class KafkaConsumerController {
     private final ProductCategoryServiceImpl productCategoryService;
     private final ProductServiceImpl productService;
 
-//    @KafkaListener(topics = "create-product", groupId = "product-enrichment-group", containerFactory = "productEnrichmentListenerFactory")
-//    public void consumeCreateProductCategoryEvent(ProductReadEvent productReadEvent) {
-//        log.info("get create read topic {}", productReadEvent);
-//        productCategoryService.createCategoryNameRead(CreateCategoryNameEventDto.from(productReadEvent));
-//    }
-//
-//    @KafkaListener(topics = "update-product", groupId = "product-enrichment-group", containerFactory = "productEnrichmentListenerFactory")
-//    public void consumeUpdateProductCategoryEvent(ProductReadEvent productReadEvent) {
-//        log.info("get update read topic {}", productReadEvent);
-//        productCategoryService.createCategoryNameRead(CreateCategoryNameEventDto.from(productReadEvent));
-//    }
-
     @KafkaListener(topics = "create-funding", groupId = "product-create-funding-group", containerFactory = "fundingEventListener")
     public void consumeCreateFundingReadEvent(FundingReadEvent event) {
         log.info("Received CREATE FUNDING event: {}", event);

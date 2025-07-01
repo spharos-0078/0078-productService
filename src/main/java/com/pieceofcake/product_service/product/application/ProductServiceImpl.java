@@ -222,16 +222,5 @@ public class ProductServiceImpl implements ProductService {
         );
 
         product.updateProductStatus(productStatus);
-
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                ProductStatusEvent event = ProductStatusEvent.builder()
-                        .productUuid(productUuid)
-                        .productStatus(productStatus)
-                        .build();
-                productKafkaProducer.sendUpdateProductStatusEvent(event);
-            }
-        });
     }
 }
