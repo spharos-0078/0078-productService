@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("api/v1/main-category")
+@RequestMapping("/api/v1/main-category")
 @RequiredArgsConstructor
 @RestController
 public class MainCategoryController {
